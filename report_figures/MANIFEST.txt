@@ -1,0 +1,29 @@
+01_dda_pairs.png                              Real/fake training pairs + amplified difference (Section: dataset)
+02_dda_spectrum.png                           Average Fourier spectrum real vs fake: shows generator 'fingerprint'
+05_augmentations.png                          Every augmentation applied to one image
+augmentations_individual/*.png                Each augmentation as a separate image
+06_six_images_per_sample.png                  The 6 images made from one training pair
+07_vit_patches.png                            How the ViT sees the image: 576 patches + CLS
+aigi_counts.csv                               Image counts per generator/subset/label
+03_aigi_counts.png                            AIGI-Now image counts per generator
+04_aigi_sample_grid.png                       AIGI-Now: sample from every generator
+aigi_per_generator/<generator>.png            4 samples per subset/label for each generator
+10_roadmap.png                                Project roadmap
+11_two_branch_system.png                      Two-branch system diagram
+12_why_two_branches.png                       Why two branches / what if one fails (from results)
+13_vit_block_lora.png                         Transformer block with LoRA attachment points
+14_lora.png                                   LoRA diagram
+15_training_diagram.png                       Architecture-level diagram of the training
+16_vlm_branch.png                             Branch 1 VLM flow
+17_fusion_cascade_audit.png                   Fusion / gating / cascade / audit explained
+18_trainable_parameters.png                   Trainable vs frozen parameters (calculated)
+20_per_generator_vlm_vs_or.png                9 generators: VLM vs OR fusion
+21_expert_heatmap.png                         Pixel expert accuracy heatmap per generator
+22_expert_auc.png                             AUC of both pixel experts per generator
+23_complementarity.png                        Expert gain vs false alarms by subset
+24_vlm_confusion.png                          VLM confusion matrix (TN, FP, FN, TP)
+25_threshold_sweep.png                        Threshold sweep for our expert
+26_fusion_methods.png                         Fusion methods on the test split
+27_cascade_tradeoff.png                       Cascade accuracy vs. VLM calls
+28_audit.png                                  E4 explanation audit
+29_training_loss.png                          Training loss at logged steps

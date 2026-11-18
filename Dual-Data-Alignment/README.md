@@ -1,0 +1,179 @@
+<div align="center">
+<h1> Dual Data Alignment [NeurIPS'25 Spotlight]</h1>
+<h3>Dual Data Alignment Makes AI-Generated Image Detector Easier Generalizable</h3>
+
+Ruoxin Chen<sup>1</sup>, Junwei Xi<sup>2</sup>, Zhiyuan Yan<sup>3</sup>, Keyue Zhang<sup>1</sup>, Shuang Wu<sup>1</sup>,  
+Jingyi Xie<sup>4</sup>, Xu Chen<sup>2</sup>, Lei Xu<sup>5</sup>, Isabel Guan<sup>6†</sup>, Taiping Yao<sup>1†</sup>, Shouhong Ding<sup>1</sup>
+
+
+<sup>1</sup>Tencent YouTu Lab
+<sup>2</sup>East China University of Science and Technology
+<sup>3</sup>Peking University
+
+<sup>4</sup>Renmin University of China
+<sup>5</sup>Shenzhen University
+<sup>6</sup>Hong Kong University of Science and Technology
+
+
+<!-- [[GitHub](https://github.com/roy-ch/Dual-Data-Alignment)] [[Paper](https://arxiv.org/abs/2505.14359)] [[Dataset (Coming Soon)]()] -->
+[![BFree](https://img.shields.io/badge/Project%20page-222222.svg?style=for-the-badge&logo=github)](https://github.com/roy-ch/Dual-Data-Alignment)
+[![arXiv](https://img.shields.io/badge/-arXiv-B31B1B.svg?style=for-the-badge&logo=arXiv)](https://arxiv.org/abs/2505.14359)
+</div>
+
+## 📣 News
+
+
+- `2025/09` : 🎉 Accepted by NeurIPS 2025 as **Spotlight**.
+- `2026/02` : Official checkpoint released. We apologize for the previously uploaded checkpoint, whose performance slightly differed from the results reported in the paper.
+- `2026/03` : Access information for 14 evaluation benchmarks has been released. We strongly recommend that future work in AIGI detection report results on all 14 benchmarks to better demonstrate overall performance and mitigate benchmark-specific bias.
+
+
+---
+
+<!-- 两图一行：bias 左边，benchmark 右边 -->
+<!-- <div style="display:flex; justify-content:space-between; align-items:center; margin:20px 0;">
+    <img src="assets/bias.png" style="max-width:48%; height:auto;" />
+    <img src="assets/BenchmarkComparison.png" style="max-width:48%; height:auto;" />
+</div> -->
+
+## 🤖 Motivation
+<div style="text-align:center; margin:20px 0;">
+    <img src="assets/motivation.png" style="max-width:60%; height:auto;" />
+</div>
+
+---
+
+## Online JPEG Compression for DDA Frequency Alignment
+
+In our DDA training pipeline, VAE-reconstructed fake images are compressed online using the same JPEG quality factor estimated from their paired real images. This step is critical for frequency-domain alignment between real and fake samples.
+
+Specifically, our implementation applies online JPEG compression to VAE-reconstructed images with the same JPEG quality factor as their corresponding real images, with a probability of 0.5. We empirically find that applying this operation with a probability of 0.5 works better than always applying it with a probability of 1.0.
+
+See `Training/data/datasets.py`, Lines 218–220:
+
+```python
+if random.random() < 0.5:
+    jpeg_quality_factor = int(sample["jpeg_quality"])
+    fake_img = JPEG_Compression(fake_img, jpeg_quality_factor)
+```
+
+---
+
+## 📊 Evaluation on 11 benchmarks
+JPEG compression with a quality factor of 96 is applied to the synthetic images in GenImage, ForenSynths, and AIGCDetectionBenchmark to mitigate format bias. The number of generators used in each dataset is reported: G refers to GAN, D to Diffusion, and AR to Auto-Regressive models. Among the 11 benchmarks, Chameleon, Synthwildx, WildRF, and Bfree-Online are the 4 in-the-wild datasets. Notably, DDA is **the first detector** to achieve over 80% cross-data accuracy on Chameleon.
+
+| Benchmark | NPR (CVPR'24) | UnivFD (CVPR'23) | FatFormer (CVPR'24) | SAFE (KDD'25) | C2P-CLIP (AAAI'25) | AIDE (ICLR'25) | DRCT (ICML'24) | AlignedForensics (ICLR'25) | DDA (ours) |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| GenImage (1G + 7D) | 51.5 ± 6.3 | 64.1 ± 10.8 | 62.8 ± 10.4 | 50.3 ± 1.2 | 74.4 ± 8.4 | 61.2 ± 11.9 | 84.7 ± 2.7 | 79.0 ± 22.7 | **91.7 ± 7.8** |
+| DRCT-2M (16D) | 37.3 ± 15.0 | 61.8 ± 8.9 | 52.2 ± 5.7 | 59.3 ± 19.2 | 59.2 ± 9.9 | 64.6 ± 11.8 | 90.5 ± 7.4 | 95.5 ± 6.1 | **98.1 ± 1.4** |
+| DDA-COCO (5D) | 42.2 ± 5.4 | 52.4 ± 1.5 | 51.7 ± 1.5 | 49.9 ± 0.3 | 51.3 ± 0.6 | 50.0 ± 0.4 | 60.2 ± 4.3 | 86.5 ± 19.1 | **92.2 ± 10.6** |
+| EvalGEN (3D + 2AR) | 2.9 ± 2.7 | 15.4 ± 14.2 | 45.6 ± 33.1 | 1.1 ± 0.6 | 38.9 ± 31.2 | 19.1 ± 11.1 | 77.8 ± 5.4 | 68.0 ± 20.7 | **97.2 ± 4.2** |
+| Synthbuster (9D) | 50.0 ± 2.6 | 67.8 ± 14.4 | 56.1 ± 10.7 | 46.5 ± 20.8 | 68.5 ± 11.4 | 53.9 ± 18.6 | 84.8 ± 3.6 | 77.4 ± 25.0 | **90.1 ± 5.6** |
+| ForenSynths (11G) | 47.9 ± 22.6 | 77.7 ± 16.1 | 90.0 ± 11.8 | 49.7 ± 2.7 | **92.0 ± 10.1** | 59.4 ± 24.6 | 73.9 ± 13.4 | 53.9 ± 7.1 | 81.4 ± 13.9 |
+| AIGCDetectionBenchmark (7G + 10D) | 53.1 ± 12.2 | 72.5 ± 17.3 | 85.0 ± 14.9 | 50.3 ± 1.1 | 81.4 ± 15.6 | 63.6 ± 13.9 | 81.4 ± 12.2 | 66.6 ± 21.6 | **87.8 ± 12.6** |
+| Chameleon (Unknown) | 59.9 | 50.7 | 51.2 | 59.2 | 51.1 | 63.1 | 56.6 | 71.0 | **82.4** |
+| Synthwildx (3D) | 49.8 ± 10.0 | 52.3 ± 11.3 | 52.1 ± 8.2 | 49.1 ± 0.7 | 57.1 ± 4.2 | 48.8 ± 0.8 | 55.1 ± 1.8 | 78.8 ± 17.8 | **90.9 ± 3.1** |
+| WildRF (Unknown) | 63.5 ± 13.6 | 55.3 ± 5.7 | 58.9 ± 8.0 | 57.2 ± 18.5 | 59.6 ± 7.7 | 58.4 ± 12.9 | 50.6 ± 3.5 | 80.1 ± 10.3 | **90.3 ± 3.5** |
+| Bfree-Online (Unknown) | 49.5 | 49.0 | 50.0 | 50.5 | 50.0 | 53.1 | 55.7 | 68.5 | **95.1** |
+| **Avg ACC** | 46.1 ± 16.1 | 56.3 ± 16.5 | 59.6 ± 14.6 | 47.6 ± 16.0 | 62.1 ± 15.6 | 54.1 ± 12.8 | 70.1 ± 14.6 | 75.0 ± 11.1 | **90.7 ± 5.3** |
+| **Min ACC** | 2.9 | 15.4 | 45.6 | 1.1 | 38.9 | 19.1 | 50.6 | 53.9 | **81.4** |
+
+
+> [!IMPORTANT]
+> **Evaluation results are sensitive to the JPEG decoding environment.** Different `libjpeg-turbo` versions may produce different RGB values when decoding the same JPEG images and consequently affect the evaluation results. To reproduce the reported results, please use **Pillow 12.3.0 with libjpeg-turbo 3.1.4.1**. We thank @wj-sim for identifying and reporting this issue ([Issue #15](https://github.com/roy-ch/Dual-Data-Alignment/issues/15)).
+
+
+---
+
+## 📊 Evaluation Benchmarks
+
+All evaluation benchmarks used in our experiments are collected from publicly available sources.  
+We sincerely thank the original authors for making these valuable AIGI detection datasets publicly accessible.  
+*Benchmarks marked with `*` are planned for future evaluation.*
+
+| Benchmark | Paper | Download |
+|---|---|---|
+| GenImage | *GenImage: A Million-Scale Benchmark for Detecting AI-Generated Images* | [Google Drive](https://drive.google.com/drive/folders/1jGt10bwTbhEZuGXLyvrCuxOI0cBqQ1FS) |
+| DRCT-2M | *DRCT: Diffusion Reconstruction Contrastive Training towards Universe Detection of Diffusion Generated Images* | [ModelScope](https://modelscope.cn/datasets/BokingChen/DRCT-2M/files) |
+| Synthbuster | *Synthbuster: Towards Detection of Diffusion Model Generated Images* | [Official Page](https://www.veraai.eu/posts/dataset-synthbuster-towards-detection-of-diffusion-model-generated-images) |
+| RAISE-1k (real subset used in Synthbuster) | Following the data source provided in *[ClipBased-SyntheticImageDetection](https://github.com/grip-unina/ClipBased-SyntheticImageDetection.git)* | [Official Download](https://www.grip.unina.it/download/prog/DMimageDetection/real_RAISE_1k.zip) |
+| ForenSynths | *CNN-generated images are surprisingly easy to spot... for now* | [Google Drive](https://drive.google.com/drive/u/0/folders/14E_R19lqIE9JgotGz09fLPQ4NVqlYbVc) · [CMU Box](https://cmu.app.box.com/s/4syr4womrggfin0tsfhxohaec5dh6n48) |
+| AIGCDetectionBenchmark | *A Comprehensive Benchmark for AI-generated Image Detection* | [ModelScope](https://modelscope.cn/datasets/aemilia/AIGCDetectionBenchmark/files) |
+| Chameleon | *A Sanity Check for AI-generated Image Detection* | Contact: [tattoo.ysl@gmail.com](mailto:tattoo.ysl@gmail.com) |
+| SynthwildX | *Raising the Bar of AI-generated Image Detection with CLIP* | [GitHub](https://github.com/grip-unina/ClipBased-SyntheticImageDetection/tree/main/data/synthwildx) |
+| WildRF | *Real-Time Deepfake Detection in the Real-World* | [Google Drive](https://drive.google.com/file/d/1A0xoL44Yg68ixd-FuIJn2VC4vdZ6M2gn/view) |
+| Bfree-Online | *A Bias-Free Training Paradigm for More General AI-generated Image Detection* | [Official Download](https://www.grip.unina.it/download/prog/B-Free/training_data/) |
+| DDA-COCO | *Dual Data Alignment Makes AI-Generated Image Detector Easier to Generalize* | [ModelScope](https://www.modelscope.cn/datasets/JunweiXi/DDA-Training-Set) |
+| EvalGEN | *Dual Data Alignment Makes AI-Generated Image Detector Easier to Generalize* | [Hugging Face](https://huggingface.co/datasets/Junwei-Xi/EvalGEN) |
+| MNW* | *Introducing the MNW Benchmark for AI Forensics* | [GitHub](https://github.com/microsoft/MNW/tree/main) |
+| AIGI-Now* | *Task-Model Alignment: A Simple Path to Generalizable AI-Generated Image Detection* | [Hugging Face](https://huggingface.co/datasets/Gaffeyzz/AIGI-Now) |
+| T2I-CoReBench-Images* | *Easier Painting Than Thinking: Can Text-to-Image Models Set the Stage, but Not Direct the Play?* | [Hugging Face](https://huggingface.co/datasets/lioooox/T2I-CoReBench-Images) |
+
+---
+
+## 📦 Training data
+
+The training dataset has been released on [ModelScope](https://www.modelscope.cn/datasets/JunweiXi/DDA-Training-Set) and [HuggingFace](https://huggingface.co/datasets/Junwei-Xi/DDA-Training-Set).
+
+---
+
+## 📑 Checkpoints
+
+* **New release**: [ModelScope](https://huggingface.co/Junwei-Xi/Dual-Data-Alignment)
+* **Old ModelScope (legacy)**: [ModelScope](https://www.modelscope.cn/datasets/roych1997/Dual_Data_Alignment/files) *(deprecated / kept for reference)*
+
+---
+
+## ⭐ New Challenging Benchmarks
+
+DDA-COCO Benchmark has been released on [ModelScope](https://www.modelscope.cn/datasets/JunweiXi/DDA-COCO) and [HuggingFace](https://huggingface.co/datasets/Junwei-Xi/DDA-COCO).
+
+EvalGEN Benchmark has been released on [ModelScope](https://www.modelscope.cn/datasets/JunweiXi/EvalGEN) and [HuggingFace](https://huggingface.co/datasets/Junwei-Xi/EvalGEN).
+
+---
+
+## 🎯 ToDo List <a name="todo"></a>
+
+- [x] Release arxiv paper with complete BibTeX citation
+- [x] Release checkpoint and inference code
+- [x] Release training set and training script
+- [x] Release code for DDA data construction
+
+
+---
+
+## 🔁 Reproduction
+
+We sincerely thank [@liyih](https://github.com/liyih) for independently retraining the model using the official DDA training code and achieving improved performance compared to the results reported in the paper (see [Issue #10](https://github.com/roy-ch/Dual-Data-Alignment/issues/10)). This validates the reproducibility of our implementation. The reproduced checkpoint is available at: https://www.modelscope.cn/models/yihengli/DDA_reproduce
+
+
+---
+
+## 📨 Contact
+
+If you have any questions or suggestions, please feel free to contact us 
+at [cusmochen@tencent.com](cusmochen@tencent.com).
+
+Feel free to reach out if you have any questions. This WeChat group brings together researchers working on AI-generated image detection, including **authors of Effort (ICML 2025 Oral), DRCT (ICML 2024 Spotlight), FakeShield (ICLR 2025) and related work**. Our goal is to build a focused community where researchers can exchange ideas and inspire new directions in AIGI detection.
+<p align="center">
+ <img src="assets/QRcode.jpg" width="200">
+</p>
+
+
+
+## 😄 Acknowledgement
+
+Part of this codebase is adapted from [UniversalFakeDetect](https://github.com/WisconsinAIVision/UniversalFakeDetect). Huge thanks to the original authors for sharing their excellent work!
+
+
+## ✍️ Citing
+If you find this repository useful for your work, please consider citing it as follows:
+```shell
+@inproceedings{chen2025dual,
+  title={Dual Data Alignment Makes {AI}-Generated Image Detector Easier Generalizable},
+  author={Ruoxin Chen and Junwei Xi and Zhiyuan Yan and Ke-Yue Zhang and Shuang Wu and Jingyi Xie and Xu Chen and Lei Xu and Isabel Guan and Taiping Yao and Shouhong Ding},
+  booktitle={The Thirty-ninth Annual Conference on Neural Information Processing Systems},
+  year={2025},
+  url={https://openreview.net/forum?id=C39ShJwtD5}
+}
+```

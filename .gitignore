@@ -1,0 +1,83 @@
+# =========================
+# Datasets and image data
+# =========================
+data/
+dda_data/
+**/dataset/
+**/datasets/
+**/train_data/
+**/test_data/
+**/images/
+eval/audit_images/
+
+# =========================
+# Model weights and checkpoints
+# =========================
+weights/
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+*.bin
+
+# =========================
+# Virtual environments
+# =========================
+gemini_env/
+venv/
+venv_*/
+env/
+.venv/
+
+# =========================
+# API keys and secrets
+# =========================
+.env
+.env.*
+!.env.example
+*api_key*
+*secret*
+*credentials*
+
+# =========================
+# Python temporary files
+# =========================
+__pycache__/
+*.py[cod]
+*.bak
+*.swp
+*.swo
+
+# =========================
+# Logs and temporary files
+# =========================
+logs/
+tmp/
+temp/
+tmp_memtest/
+
+# =========================
+# Generated archives
+# =========================
+*.zip
+*.tar
+*.tar.gz
+
+# =========================
+# OS and editor files
+# =========================
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Large experiment outputs and checkpoints
+output/
+eval/vlm_lp_s1/
+eval/vlm_lp_s10/
+eval/vlm_full/
+eval/audit_images/
+eval/audit_images.zip
+
+# Generated temporary reports
+*.zip

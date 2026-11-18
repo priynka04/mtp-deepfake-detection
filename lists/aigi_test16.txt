@@ -1,0 +1,16 @@
+/DATA/storage/ab_students/align_gemini_project/data/aigi_now/AIGI-Now/flux-dev/pixel/0_real/000000001000.jpg
+/DATA/storage/ab_students/align_gemini_project/data/aigi_now/AIGI-Now/flux-dev/semantic/0_real/000000151051.jpg
+/DATA/storage/ab_students/align_gemini_project/data/aigi_now/AIGI-Now/flux-kera/pixel/0_real/000000285349.jpg
+/DATA/storage/ab_students/align_gemini_project/data/aigi_now/AIGI-Now/flux-kera/semantic/0_real/000000437110.jpg
+/DATA/storage/ab_students/align_gemini_project/data/aigi_now/AIGI-Now/flux-kontext/pixel/1_fake/000000000724.jpg
+/DATA/storage/ab_students/align_gemini_project/data/aigi_now/AIGI-Now/flux-kontext/semantic/1_fake/000000155451.jpg
+/DATA/storage/ab_students/align_gemini_project/data/aigi_now/AIGI-Now/flux-pro/pixel/1_fake/000000295809.jpg
+/DATA/storage/ab_students/align_gemini_project/data/aigi_now/AIGI-Now/flux-pro/semantic/1_fake/000000448810.jpg
+/DATA/storage/ab_students/align_gemini_project/data/aigi_now/AIGI-Now/gpt4o/semantic/0_real/000000000724.jpg
+/DATA/storage/ab_students/align_gemini_project/data/aigi_now/AIGI-Now/jimeng/pixel/0_real/000000163155.jpg
+/DATA/storage/ab_students/align_gemini_project/data/aigi_now/AIGI-Now/jimeng/semantic/0_real/000000292060.jpg
+/DATA/storage/ab_students/align_gemini_project/data/aigi_now/AIGI-Now/keling/pixel/0_real/000000453841.jpg
+/DATA/storage/ab_students/align_gemini_project/data/aigi_now/AIGI-Now/keling/semantic/1_fake/000000001761.jpg
+/DATA/storage/ab_students/align_gemini_project/data/aigi_now/AIGI-Now/minimax/pixel/1_fake/000000157124.jpg
+/DATA/storage/ab_students/align_gemini_project/data/aigi_now/AIGI-Now/minimax/semantic/1_fake/000000296649.jpg
+/DATA/storage/ab_students/align_gemini_project/data/aigi_now/AIGI-Now/Nano/pixel/1_fake/000000431727.jpg

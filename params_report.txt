@@ -1,0 +1,28 @@
+
+===== output/pixel_expert/DINO_336_LoRA8_LR1e-4_BS16_full_run1/model_epoch_0.pth
+top-level keys: model, optimizer, total_steps
+total_steps: 59143
+  head tensor: base_model.fc.weight (1, 1024)
+  head tensor: base_model.fc.bias (1,)
+tensors: 537 (lora 192, head 2, other 343)
+LoRA numbers          : 3,145,728
+head numbers          : 1,025
+other (backbone) nums : 304,368,640
+total numbers in file : 307,515,393
+optimizer state found under 'optimizer'
+  group 0: 384 parameters, lr=1.1067501153450657e-05
+  parameters that have Adam state: 192, total numbers 3,145,728
+
+===== weights/dda_ckpt/DDA_ckpt.pth
+top-level keys: model, optimizer, total_steps
+total_steps: 130000
+  head tensor: base_model.fc.weight (1, 1024)
+  head tensor: base_model.fc.bias (1,)
+tensors: 537 (lora 192, head 2, other 343)
+LoRA numbers          : 3,145,728
+head numbers          : 1,025
+other (backbone) nums : 304,368,640
+total numbers in file : 307,515,393
+optimizer state found under 'optimizer'
+  group 0: 384 parameters, lr=8.536998371835077e-05
+  parameters that have Adam state: 192, total numbers 3,145,728
